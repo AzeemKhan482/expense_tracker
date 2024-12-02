@@ -22,7 +22,7 @@ class Expense {
     required this.date,
     required this.category,
     }): id = uuid.v4();      //initializer lists" can be used to initialize class properties(like id) with values that are not received as constructer function arguments.
-                              // v4 method genrate String unique ID's
+                              // v4 method genrate String unique ID's .....
 
   final String id;
   final String tittle;
