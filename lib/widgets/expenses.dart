@@ -27,13 +27,16 @@ class _ExpensesState extends State<Expenses> {
         category: Category.leisure),
   ]; //use Expense class(data Model) as a type to get all values of this class
 
+void _openAddExpenseOverlay(){
+  showModalBottomSheet(context: context, builder: (ctx)=> const Text("Model Bottom Sheet"),);
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Flutter ExpenseTracker"),
         actions: [
-        IconButton(onPressed: (){}, icon:const Icon(Icons.add)),
+        IconButton(onPressed: _openAddExpenseOverlay, icon:const Icon(Icons.add)),
       ],),
       body: Column(
         children: [
