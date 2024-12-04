@@ -33,20 +33,32 @@ class _NewExpenseState extends State<NewExpense> {
             maxLength: 50,
             decoration: const InputDecoration(label: Text("Title")),
           ),
-          TextField(
-            controller: _amountController,
-            keyboardType: TextInputType.number,
+          Row(
+            children: [
+              Expanded(                                   //use Expanded to tell text field to take availible space only
+                child: TextField(
+                  controller: _amountController,
+                  keyboardType: TextInputType.number,
+                
+                  decoration: const InputDecoration(
+                      label: Text("Amount"),
+                      prefixText:                             //PrefixText will Assign pre Text to every input
+                      "\$ "), ),
+              ),
+                   const SizedBox(width: 16),
+                   Expanded(child: Row(children: [
+                    const Text("Selected Date"),
+                    IconButton(onPressed:(){}, icon:const Icon(Icons.calendar_month)),
+                   ],))
 
-            decoration: const InputDecoration(
-                label: Text("Amount"),
-                prefixText:                             //PrefixText will Assign pre Text to every input
-                "\$ "), 
+              
+            ],
           ),
           Row(
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);       // This pop fuction will exit the Screen
+                  Navigator.pop(context);               // This pop fuction will exit the Screen
                 },
                 child: const Text("Cancel"),
               ),
