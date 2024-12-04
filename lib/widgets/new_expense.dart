@@ -1,39 +1,66 @@
-import 'package:flutter/material.dart';                                                    
+import 'package:flutter/material.dart';
 
-class NewExpense extends StatefulWidget{                                                               
+class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
   @override
   State<NewExpense> createState() {
-   return _NewExpenseState();
+    return _NewExpenseState();
   }
 }
 
-class _NewExpenseState extends State<NewExpense>{      
+class _NewExpenseState extends State<NewExpense> {
+  final _titleController =
+      TextEditingController(); // its automatic create a object when user put a value
+  final _amountController = TextEditingController();
 
-  final _titleController = TextEditingController();        // its automatic create a object when user put a value
+  void dispose() {
+    _titleController
+        .dispose(); // when use controller, must use dispose method because when widget not requied it will be deleted.
+    _amountController.dispose();
+
+    super
+        .dispose(); //dispose like "initState" or "build" method part of StatefullWidget lifecycle , Its called automatically
+  } // by Flutter when the widgets and its state are about to destroyed(removed from the UI)
 
   @override
-
-  void dispose(){    
-    _titleController.dispose();                         // when use controller, must use dispose method because when widget not requied it will be deleted.
-    super.dispose();                                    //dispose like "initState" or "build" method part of StatefullWidget lifecycle , Its called automatically
-  }                                                     // by Flutter when the widgets and its state are about to destroyed(removed from the UI)
   Widget build(BuildContext context) {
-    return  Padding(padding: const EdgeInsets.all(15),
-    child: Column(children: [
-      TextField(
-            controller: _titleController,                                           
-        maxLength: 50,
-        decoration: const InputDecoration(label: Text("Title")),
-        
-        ),
-        Row(children: [
-          ElevatedButton(onPressed: (){
-            print(_titleController);
-          }, child: const Text("Save Expense"))
-        ],)
-    ],),
-    
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        children: [
+          TextField(
+            controller: _titleController,
+            maxLength: 50,
+            decoration: const InputDecoration(label: Text("Title")),
+          ),
+          TextField(
+            controller: _amountController,
+            keyboardType: TextInputType.number,
+
+            decoration: const InputDecoration(
+                label: Text("Amount"),
+                prefixText:                             //PrefixText will Assign pre Text to every input
+                "\$ "), 
+          ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);       // This pop fuction will exit the Screen
+                },
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  print(_titleController);
+                  print(_amountController);
+                },
+                child: const Text("Save Expense"),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
