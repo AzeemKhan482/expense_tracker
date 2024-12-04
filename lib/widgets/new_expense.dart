@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/Models/expense.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -13,6 +14,25 @@ class _NewExpenseState extends State<NewExpense> {
       TextEditingController(); // its automatic create a object when user put a value
   final _amountController = TextEditingController();
 
+  DateTime? _selectedDate;
+
+  void _presentDatePicker() async {
+    // Its return Future widget , when you clicked, it created function even you can select date or value yet.so we use Sync await function to hold till value dileverd by users.
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final pickedDate = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: now);
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
+  // .then( (value) {}); // we use then() function for hold when user give date then it will take it , not take empty function
+  // but we use (Snyc await )function rather which is better than this
+
+  @override
   void dispose() {
     _titleController
         .dispose(); // when use controller, must use dispose method because when widget not requied it will be deleted.
@@ -35,30 +55,40 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           Row(
             children: [
-              Expanded(                                   //use Expanded to tell text field to take availible space only
+              Expanded(
+                //use Expanded to tell text field to take availible space only , Otherwise it'll take all space and row dosn't restrict it...
                 child: TextField(
                   controller: _amountController,
                   keyboardType: TextInputType.number,
-                
                   decoration: const InputDecoration(
                       label: Text("Amount"),
-                      prefixText:                             //PrefixText will Assign pre Text to every input
-                      "\$ "), ),
+                      prefixText: //PrefixText will Assign pre Text to every input
+                          "\$ "),
+                ),
               ),
-                   const SizedBox(width: 16),
-                   Expanded(child: Row(children: [
-                    const Text("Selected Date"),
-                    IconButton(onPressed:(){}, icon:const Icon(Icons.calendar_month)),
-                   ],))
-
-              
+              const SizedBox(width: 16),
+              Expanded(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(_selectedDate == null
+                      ? "No Date Selected "
+                      : formatter.format(
+                          _selectedDate!)), // use ! to insit flutter that it will not be null
+                  IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: const Icon(Icons.calendar_month)),
+                ],
+              ))
             ],
           ),
           Row(
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);               // This pop fuction will exit the Screen
+                  Navigator.pop(
+                      context); // This pop fuction will exit the Screen
                 },
                 child: const Text("Cancel"),
               ),
