@@ -15,6 +15,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _amountController = TextEditingController();
 
   DateTime? _selectedDate;
+Category _selectedCategory = Category.leisure;
 
   void _presentDatePicker() async {
     // Its return Future widget , when you clicked, it created function even you can select date or value yet.so we use Sync await function to hold till value dileverd by users.
@@ -75,7 +76,7 @@ class _NewExpenseState extends State<NewExpense> {
                   Text(_selectedDate == null
                       ? "No Date Selected "
                       : formatter.format(
-                          _selectedDate!)), // use ! to insit flutter that it will not be null
+                          _selectedDate!)), // use ! to insit flutter that it will not be null , becoz we also checking null befor in if statment
                   IconButton(
                       onPressed: _presentDatePicker,
                       icon: const Icon(Icons.calendar_month)),
@@ -83,8 +84,30 @@ class _NewExpenseState extends State<NewExpense> {
               ))
             ],
           ),
+          const SizedBox(height: 16,),
           Row(
             children: [
+              DropdownButton(
+                  items: Category.values
+                      .map((category) => DropdownMenuItem(
+                            // we use .Map() function here because Category value is (enum => fixed values set) and drop down button want a list of dropdownMenuItem
+                            value:
+                                category, //this extra (value) feature will store every dropdown value
+                            child: Text(
+                              category.name
+                                  .toUpperCase(), // .name property also use enum values to string values and not visible to the use but child visible
+                            ),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if(value == null){
+                      return;
+                    }
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                  }),
+                const Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pop(
