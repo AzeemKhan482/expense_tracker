@@ -8,9 +8,16 @@ class ExpensesList extends StatelessWidget {
   final List<Expense> expenses;
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(      //its build a list like a column but on demand 
+    return ListView.builder(
+      //its build a list like a column but on demand
       itemCount: expenses.length,
-      itemBuilder: (ctx, index) => ExpenseItem(expenses[index]),
+      itemBuilder: (ctx, index) => Dismissible(
+        //Dismissible use for Delete items with swipe left
+        key: ValueKey(expenses[index]),
+        child: ExpenseItem(
+          expenses[index],
+        ),
+      ),
     );
   }
 }

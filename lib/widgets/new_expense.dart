@@ -16,7 +16,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _amountController = TextEditingController();
 
   DateTime? _selectedDate;
-  Category selectedCategory = Category.food;
+  Category _selectedCategory = Category.food;
 
   void _presentDatePicker() async {
     // Its return Future widget , when you clicked, it created function even you can select date or value yet.so we use Sync await function to hold till value dileverd by users.
@@ -54,14 +54,16 @@ class _NewExpenseState extends State<NewExpense> {
                       },
                       child: const Text("Okay"))
                 ],
-              ));
+              )
+              );
       return; // when you return in afunction you make sure there no code there after to get execute
     }
     widget.onAddExpense(Expense(            //we use widget is statefull to gey things in state class from widget class
         tittle: _titleController.text,
         amount: enteredAmount.toString(),
         date: _selectedDate!,
-        category: selectedCategory));
+        category: _selectedCategory));
+        Navigator.pop(context);
   }
 
   @override
@@ -77,7 +79,7 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.fromLTRB(16,48,16,16),
       child: Column(
         children: [
           TextField(
@@ -125,7 +127,7 @@ class _NewExpenseState extends State<NewExpense> {
                       .map((category) => DropdownMenuItem(
                             // we use .Map() function here because Category value is (enum => fixed values set) and drop down button want a list of dropdownMenuItem
                             value:
-                                category, //this extra (value) feature will store every dropdown value
+                               category, //this extra (value) feature will store every dropdown value
                             child: Text(
                               category.name
                                   .toUpperCase(), // .name property also use enum values to string values and not visible to the use but child visible
@@ -137,7 +139,7 @@ class _NewExpenseState extends State<NewExpense> {
                       return;
                     }
                     setState(() {
-                      selectedCategory = value;
+                      _selectedCategory = value;
                     });
                   }),
               const Spacer(),
