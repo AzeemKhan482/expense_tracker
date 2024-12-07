@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:expense_tracker/Models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+  final void Function(Expense expense) onAddExpense;
   @override
   State<NewExpense> createState() {
     return _NewExpenseState();
@@ -15,7 +16,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _amountController = TextEditingController();
 
   DateTime? _selectedDate;
-Category _selectedCategory = Category.leisure;
+  Category selectedCategory = Category.food;
 
   void _presentDatePicker() async {
     // Its return Future widget , when you clicked, it created function even you can select date or value yet.so we use Sync await function to hold till value dileverd by users.
@@ -30,8 +31,38 @@ Category _selectedCategory = Category.leisure;
       _selectedDate = pickedDate;
     });
   }
+
   // .then( (value) {}); // we use then() function for hold when user give date then it will take it , not take empty function
   // but we use (Snyc await )function rather which is better than this
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController
+        .text); //tryParse ('Hello') => null ,tryParse('1.12') => 1.12
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text("Invalid Input"),
+                content: const Text(
+                    "Please make sure a valid title,amount date and a category was entered"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                      },
+                      child: const Text("Okay"))
+                ],
+              ));
+      return; // when you return in afunction you make sure there no code there after to get execute
+    }
+    widget.onAddExpense(Expense(            //we use widget is statefull to gey things in state class from widget class
+        tittle: _titleController.text,
+        amount: enteredAmount.toString(),
+        date: _selectedDate!,
+        category: selectedCategory));
+  }
 
   @override
   void dispose() {
@@ -84,7 +115,9 @@ Category _selectedCategory = Category.leisure;
               ))
             ],
           ),
-          const SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
               DropdownButton(
@@ -100,14 +133,14 @@ Category _selectedCategory = Category.leisure;
                           ))
                       .toList(),
                   onChanged: (value) {
-                    if(value == null){
+                    if (value == null) {
                       return;
                     }
                     setState(() {
-                      _selectedCategory = value;
+                      selectedCategory = value;
                     });
                   }),
-                const Spacer(),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pop(
@@ -116,10 +149,7 @@ Category _selectedCategory = Category.leisure;
                 child: const Text("Cancel"),
               ),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController);
-                  print(_amountController);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text("Save Expense"),
               ),
             ],

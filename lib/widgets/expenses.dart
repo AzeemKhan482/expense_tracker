@@ -29,7 +29,13 @@ class _ExpensesState extends State<Expenses> {
   ]; //use Expense class(data Model) as a type to get all values of this class
 
 void _openAddExpenseOverlay(){
-  showModalBottomSheet(context: context, builder: (ctx)=>const NewExpense(),);
+  showModalBottomSheet(context: context, builder: (ctx)=> NewExpense(onAddExpense: _addExpense,),);
+}
+
+void _addExpense(Expense expense){
+  setState(() {
+    _registerdExpenses.add(expense);
+  });
 }
   @override
   Widget build(BuildContext context) {
