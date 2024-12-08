@@ -60,7 +60,7 @@ class _NewExpenseState extends State<NewExpense> {
     }
     widget.onAddExpense(Expense(            //we use widget is statefull to gey things in state class from widget class
         tittle: _titleController.text,
-        amount: enteredAmount.toString(),
+        amount: enteredAmount,
         date: _selectedDate!,
         category: _selectedCategory));
         Navigator.pop(context);

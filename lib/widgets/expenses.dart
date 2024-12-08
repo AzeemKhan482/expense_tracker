@@ -1,4 +1,5 @@
 import 'package:expense_tracker/Models/expense.dart';
+import 'package:expense_tracker/widgets/chart/chart.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracker/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +17,12 @@ class _ExpensesState extends State<Expenses> {
     //use Expense class(data Model) as a type to get all values of this class
     Expense(
         tittle: "Flutter Course",
-        amount: 19.9999.toStringAsFixed(
-            2), //ToStringAsFixed is used for 2 nmbrs after (.) , like 1.2345 to 1.23
+        amount: 19.9999, //ToStringAsFixed is used for 2 nmbrs after (.) , like 1.2345 to 1.23
         date: DateTime.now(),
         category: Category.work),
     Expense(
         tittle: "Cinema",
-        amount: 15.6999.toStringAsFixed(
-            2), //ToStringAsFixed is used for 2 nmbrs after (.) , like 1.2345 to 1.23
+        amount: 15.6999, //ToStringAsFixed is used for 2 nmbrs after (.) , like 1.2345 to 1.23
         date: DateTime.now(),
         category: Category.leisure),
   ]; //use Expense class(data Model) as a type to get all values of this class
@@ -74,7 +73,7 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          const Text("The Chart"),
+          Expanded(child: Chart(expenses: _registerdExpenses)),
           Expanded(
             //Expanded use for get together 2 column
             child: mainContent,
